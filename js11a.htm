@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Document</title>
+        <style>
+            #cedvel { border-collapse: collapse ; margin: 20vh auto;}
+            td { border: 1px solid #333; width: 20vh; height: 20vh; font: 3em Arial; color: #999; text-align: center }
+            #time {font: 2em Arial; color: #ff3300 }
+            #game {color: yellow; background-color: #000;}
+        </style>
+    </head>
+    <body>
+        <table id="cedvel"><caption id="time">10</caption></table>
+
+        <script>
+            const cedvel = document.getElementById('cedvel')
+            let sec = 10
+            let order = 1
+            cedvelQur()
+            let timer = setInterval(timing, 1000)
+
+            function timing (){
+                if (sec > 0) {
+                    sec--
+                    document.getElementById('time').innerHTML = sec
+                } else {
+                    gameOver(0)
+                    gameOvers()
+                }
+            }
+
+            function gameOvers() {
+               let td = cedvel.getElementsByTagName ("td")
+               let txt = "GAMEOVER"
+               for(let i = 4; i <= 11; i++ ) {
+                   td[i].style.cssText = "background: #000; color: #ffff00"
+                   td[i].innerHTML = txt[i-4]
+               }
+            }  
+
+            function klik(elem) {
+                if (elem.innerHTML == order) {
+                    elem.style.background = "#AAA"
+                    if (order < 16) order++
+                    else { 
+                        gameOver(1)
+                    }
+                }
+            }
+
+            function gameOver(status) {
+                clearInterval(timer)  
+                order = 17
+                let msg = status ? "Qazandiniz" : "Uduzdunuz"
+                time.innerHTML = "OYUN BITDI !" + msg
+            }
+
+            function cedvelQur() {
+                let kod = ''
+                let arr = []
+                for (let i = 1; i <= 16; i++) { arr.push(i) }
+                for (let i = 0; i < 4; i++) {
+                    kod += '<tr>'
+                        for ( let j = 0; j < 4; j++) {
+                            let x = rand(0,arr.length-1)
+                            kod += `<td onclick="klik(this)">${arr[x]}</td>`
+                            arr.splice(x,1)
+                            
+                        }
+                    kod += '</tr>'     
+                }
+                cedvel.innerHTML += kod
+            }
+
+            function rand(min, max) {
+                return Math.floor(Math.random() * (max - min + 1) ) + min;
+            }
+        </script>
+    </body>
+</html>
